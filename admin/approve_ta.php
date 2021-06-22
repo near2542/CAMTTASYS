@@ -151,7 +151,7 @@ while($row = mysqli_fetch_assoc($major))
             <td><?=$data['portfolio_link']==null? "none" : $data['portfolio_link']?></td>
             <td>
             <button class="btn btn-success" data-target="#edit<?=$data['register_id']?>" data-toggle="modal">Approve</button> 
-            <button class="btn btn-danger" data-target="#edit<?=$data['register_id']?>" data-toggle="modal">Reject</button> 
+            <button class="btn btn-danger" data-target="#delete<?=$data['register_id']?>" data-toggle="modal">Reject</button> 
             
             </td>
 
@@ -233,7 +233,7 @@ while($row = mysqli_fetch_assoc($major))
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="./approve_ta/approve.php?id=<?=$data[0]?>&type=<?=$data['user_type']?>" method="POST">
+      <form action="./approve_ta/reject.php?id=<?=$data[0]?>&type=<?=$data['user_type']?>" method="POST">
       <div class="modal-body">
       <div class="form-floating mb-3 p-2">
       <label for="floatingInput">Course ID</label>

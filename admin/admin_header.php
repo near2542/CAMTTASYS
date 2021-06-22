@@ -151,15 +151,7 @@ require_once('../db/connect.php');
 
               <!-- /menu footer buttons -->
               <div class="sidebar-footer hidden-small">
-                <a data-toggle="tooltip" data-placement="top" title="Settings">
-                  <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                </a>
-                <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                  <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-                </a>
-                <a data-toggle="tooltip" data-placement="top" title="Lock">
-                  <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-                </a>
+                
                 <a data-toggle="tooltip" data-placement="top" title="Logout" href="./logout.php">
                   <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                 </a>
@@ -168,7 +160,7 @@ require_once('../db/connect.php');
     </div>
   </div>
   <!-- top navigation -->
-  <div class="top_nav">
+  <div class="top_nav" style="min-width:100vw;">
     <div class="nav_menu">
       <div class="nav toggle">
         <a id="menu_toggle"><i class="fa fa-bars"></i></a>
@@ -179,7 +171,7 @@ require_once('../db/connect.php');
             <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown"
               data-toggle="dropdown" aria-expanded="false">
               <img src="images/img.jpg" alt="">
-              <?= $_SESSION['id'] ?>
+              <?= $_SESSION['name']  ?>
             </a>
             <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="javascript:;"> Profile</a>

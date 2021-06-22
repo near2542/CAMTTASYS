@@ -10,7 +10,7 @@ where deleted !=1 ORDER BY course_id,major_id");
 
 $ta_request = "SELECT *
 FROM ta_request t INNER JOIN matching_course m ON t.m_course_id = m.m_course_id
-INNER JOIN course c ON c.course_id = m.courseID
+INNER JOIN course c ON c.id = m.courseID
 INNER JOIN user_tbl u ON u.user_id = m.user_id
 INNER JOIN semester s ON m.sem_id = s.sem_id
 INNER JOIN day_work d ON m.t_date = d.id
@@ -85,7 +85,7 @@ while ($row = mysqli_fetch_assoc($day)) {
 <body class="nav-md">
   <div class="container body">
     <div class="main_container">
-    
+
       <?php require_once('./admin_header.php'); ?>
       <?php
       // $queryMatchCourse = "SELECT * FROM matching_course m
@@ -101,18 +101,17 @@ while ($row = mysqli_fetch_assoc($day)) {
 FROM matching_course m
 LEFT JOIN ta_request t ON t.m_course_id = m.m_course_id
 INNER JOIN semester s on m.sem_id = s.sem_id
-INNER JOIN course c on m.course_id = c.id
+INNER JOIN course c on m.courseID = c.id
 INNER JOIN day_work d on m.t_date = d.id
 WHERE user_id = '{$_SESSION['id']}' and m.deleted = 0 
 ORDER BY s.sem_number,m.m_status;";
 
 
       $MatchCourse = $conn->query($ta_request);
-
       ?>
 
       <!-- page content -->
-      <div class="right_col" role="main" style="min-height:100vh">
+      <div class="right_col" role="main" style="min-height:100vh;min-width:100vw;">
         <div class="content mt-5">
           <table class="table table-striped">
             <tr>
@@ -129,8 +128,7 @@ ORDER BY s.sem_number,m.m_status;";
               <th>Action</th>
             </tr>
 
-            <?php while ($data = mysqli_fetch_assoc($MatchCourse)) {
-            ?>
+            <?php while ($data = mysqli_fetch_assoc($MatchCourse)) { ?>
               <tr>
                 <td><?= $data['m_status'] == 1 ? "open" : "close" ?></td>
                 <td><?= $data['sem_number'] ?></td>
@@ -152,7 +150,7 @@ ORDER BY s.sem_number,m.m_status;";
                     <button class="btn btn-success" data-target="#edit<?= $data['m_course_id'] ?>" data-toggle="modal">
                       Approve
                     </button>
-                    <button class="btn btn-danger" data-target="#delete<?= $data['m_course_id'] ?>" data-toggle="modal">Delete</button>
+                    <button class="btn btn-danger" data-target="#delete<?= $data['m_course_id'] ?>" data-toggle="modal">Reject</button>
                   <?php } ?>
                 </td>
 
@@ -215,7 +213,7 @@ ORDER BY s.sem_number,m.m_status;";
 
                           <div class="form-floating mb-3">
                             <label for="floatingInput">Wanted External Number</label>
-                            <input type="text" class="form-control" id="floatingInput" name="Ex" placeholder="External Number"  value="<?= $data['ex_num'] ?>" disabled>
+                            <input type="text" class="form-control" id="floatingInput" name="Ex" placeholder="External Number" value="<?= $data['ex_num'] ?>" disabled>
                           </div>
 
                           <div class="form-group">
@@ -228,7 +226,7 @@ ORDER BY s.sem_number,m.m_status;";
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" name="add" class="btn btn-primary">Request</button>
+                          <button type="submit" name="add" class="btn btn-primary">Approve</button>
                         </div>
                       </form>
                     </div>
@@ -238,11 +236,11 @@ ORDER BY s.sem_number,m.m_status;";
 
                 <!-- Delete -->
 
-                <div class="modal fade" id="delete<?= $data['course_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="delete<?= $data['m_course_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">ApproveTA ?></h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Reject TA Request</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>

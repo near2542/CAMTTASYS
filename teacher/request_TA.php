@@ -234,7 +234,7 @@ ORDER BY s.sem_number,m.m_status;";
             <?php } ?>
             <?php if ($data['approved'] == 0) {?>
             <button class="btn btn-success" data-target="#edit<?=$data['m_course_id']?>" data-toggle="modal" <?=$data['request_id']? "disabled" : null?>>
-            <?=$data['request_id']? "Requested": "Request"?>
+            <?=$data['request_id']? "Cancel Request": "Request"?>
             </button> 
             </td>
             <?php } ?>

@@ -4,7 +4,7 @@ require_once('./check_teacher.php');
 
 require_once('../db/connect.php');
 $conn->init();
-$courses = $conn->query("SELECT course_id,course_name,m.major_id,major_name 
+$courses = $conn->query("SELECT id,course_id,course_name,m.major_id,major_name 
 from course c
 INNER JOIN major m on c.major_id = m.major_id
 where deleted !=1 ORDER BY course_id,major_id");
@@ -20,7 +20,7 @@ $day_option = '';
 while($row = mysqli_fetch_assoc($courses))
 {
     $coursesOption .= sprintf('<option value="%d">%s</option>',
-  $row['course_id'],
+  $row['id'],
   "{$row['course_id']} {$row['course_name']}:{$row['major_name']}");
 }
 

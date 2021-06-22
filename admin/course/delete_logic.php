@@ -27,7 +27,7 @@ if($existCourses->num_rows < 0) {
     redirect('../course.php');
 }
 
-$insert = sprintf("Update course SET deleted='1' where course_id = '%d' ",
+$insert = sprintf("Update course SET deleted='1' where id = '%d' ",
     $conn->real_escape_string($old),
 );
 

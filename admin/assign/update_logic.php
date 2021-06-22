@@ -35,7 +35,7 @@ else {
     exit(0);
 }
 
-$query = sprintf("UPDATE  matching_course SET  sem_id = '%d', course_id = '%d', section = '%s', t_date = '%s',
+$query = sprintf("UPDATE  matching_course SET  sem_id = '%d', courseID = '%d', section = '%s', t_date = '%s',
                     t_time = '%s', user_id = '%d', language = '%s', hr_per_week =  '%s', m_status = '1',deleted = '0' where m_course_id = '%d' ",
         $conn->real_escape_string($sem_id),
         $conn->real_escape_string($course_id),
@@ -57,14 +57,14 @@ if(mysqli_error($conn)){
 var_dump($result);
 if(!$result)
 {
-    $conn->close();
     $_SESSION['error'] = "Something Went Wrong!";
     die('error' + mysqli_error($conn));
+    $conn->close();
     header($redirect); exit(0);
 }
 
 else{
-    $_SESSION['error'] = "Add Course Success";
+    $_SESSION['error'] = "Update Course Success";
     header($redirect);
     exit(0);
 }

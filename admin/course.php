@@ -59,13 +59,14 @@ while ($row = mysqli_fetch_assoc($major)) {
       <?php
       $filterQuery = '';
       if (isset($_GET['status']) and $_GET['status'] != 'all') {
-        $courses = $conn->query("SELECT * FROM course c LEFT JOIN major m ON c.major_id = m.major_id where c.deleted = '$status'  order by c.deleted ");
+        $status=$_GET['status'];
+        $courses = $conn->query("SELECT * FROM course c LEFT JOIN major m ON c.major_id = m.major_id where c.deleted = '$status'  order by course_id,c.major_id, c.deleted ");
       } else {
-        $courses = $conn->query("SELECT * FROM course c LEFT JOIN major m ON c.major_id = m.major_id   order by c.deleted ");
+        $courses = $conn->query("SELECT * FROM course c LEFT JOIN major m ON c.major_id = m.major_id   order by course_id,c.major_id,c.deleted ");
       }
       ?>
 
-
+<?= mysqli_error($conn)?>
 
       <!-- page content -->
       <div class="right_col" role="main" style="min-height:100vh">
@@ -73,9 +74,9 @@ while ($row = mysqli_fetch_assoc($major)) {
           <form action="./course.php" method="GET">
 
             <label for="floatingInput">
-              <h2>Search by Year:</h2>
+              <h2>Search by Status:</h2>
             </label>
-            <select class="form-control" default="<?= $_GET['status'] ? $_GET['status'] : 'all' ?>" name="year" placeholder="Select The Major">
+            <select class="form-control" default="<?= $_GET['status'] ? $_GET['status'] : 'all' ?>" name="status" placeholder="Select The Major">
               <option>All</option>
               <option value="0">Open Courses</option>
               <option value="1">Closed Courses</option>
@@ -142,8 +143,8 @@ while ($row = mysqli_fetch_assoc($major)) {
                   <td><?= $data['major_name'] ?></td>
                   <td>
                     <?php if ($data['deleted'] == 0) : ?>
-                      <button class="btn btn-success" data-target="#edit<?= $data['course_id'] ?>" data-toggle="modal">Edit</button>
-                      <button class="btn btn-danger" data-target="#delete<?= $data['course_id'] ?>" data-toggle="modal">Delete</button>
+                      <button class="btn btn-success" data-target="#edit<?= $data['id'] ?>" data-toggle="modal">Edit</button>
+                      <button class="btn btn-danger" data-target="#delete<?= $data['id'] ?>" data-toggle="modal">Delete</button>
                     <?php elseif ($data['deleted'] == 1) : ?>
                       <button class="btn btn-danger" data-target="#retreive<?= $data['id'] ?>" data-toggle="modal">Retrieve Course</button>
 
@@ -151,7 +152,7 @@ while ($row = mysqli_fetch_assoc($major)) {
                   </td>
 
                   <!--  Edit -->
-                  <div class="modal fade" id="edit<?= $data['course_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal fade" id="edit<?= $data['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -160,7 +161,7 @@ while ($row = mysqli_fetch_assoc($major)) {
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        <form action="./course/update_logic.php?old=<?=$data['courseID'] ?>" method="POST">
+                        <form action="./course/update_logic.php?old=<?=$data['id'] ?>" method="POST">
                           <div class="modal-body">
 
                             <div class="form-floating mb-3">
@@ -227,7 +228,7 @@ while ($row = mysqli_fetch_assoc($major)) {
                   </div>
                   <!-- Delete -->
 
-                  <div class="modal fade" id="delete<?= $data['course_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal fade" id="delete<?= $data['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -236,7 +237,7 @@ while ($row = mysqli_fetch_assoc($major)) {
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        <form action="./course/delete_logic.php?old=<?= $data['courseID'] ?>" method="POST">
+                        <form action="./course/delete_logic.php?old=<?= $data['id'] ?>" method="POST">
                           <div class="modal-body">
 
                             <h2>Are you sure deleteing <?= $data['course_id'] ?> <?= $data['course_name'] ?></h2>

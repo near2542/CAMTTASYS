@@ -26,7 +26,7 @@ if($_SESSION['role']!=1)
     exit(0);
 }
 
-$query = sprintf("SELECT * FROM course WHERE course_id = %d and course_name = %s and major_id = %d "
+$query = sprintf("SELECT * FROM course WHERE course_id = '%d' and course_name = '%s' and major_id = '%d'"
                 ,$conn->real_escape_string($id)
                 ,$conn->real_escape_string($course_name)
                 ,$conn->real_escape_string($major_id)
@@ -34,6 +34,7 @@ $query = sprintf("SELECT * FROM course WHERE course_id = %d and course_name = %s
 
 
 $existCourses = $conn->query($query);
+if(mysqli_error($conn)) echo mysqli_error($conn);
 if($existCourses->num_rows > 0) { 
     $conn->close();
     $_SESSION['error'] = "Course Already Exits!";

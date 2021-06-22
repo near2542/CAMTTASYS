@@ -48,7 +48,7 @@ $query = sprintf("INSERT INTO matching_course values ('','%d','%d','%s','%s','%s
 $result = $conn->query($query);
 
 if(mysqli_error($conn)){
-    echo mysqli_error($conn);
+    die (mysqli_error($conn));
 }
 
 if(!$result)

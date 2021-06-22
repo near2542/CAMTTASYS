@@ -22,5 +22,6 @@ else {
 // echo $port;
 // echo $dbname;
 	$conn= new mysqli($host,$username,$password,$dbname,$port) or die("Could not connect to mysql".mysqli_error($conn));
+	mysqli_query($conn,"SET NAMES UTF8");
 	
 ?>

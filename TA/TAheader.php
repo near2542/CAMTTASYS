@@ -50,7 +50,7 @@ require_once('../db/connect.php');
         <div class="profile_info">
           <span>Welcome,</span>
           <h2>
-            <?= $_SESSION['user'] ?>
+            <?= $_SESSION['name'] ?>
           </h2>
         </div>
       </div>
@@ -130,6 +130,7 @@ require_once('../db/connect.php');
       <nav class="nav navbar-nav">
         <ul class=" navbar-right">
           <li class="nav-item dropdown open" style="padding-left: 15px;">
+            <?= $_SESSION['name'] ?>
             <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown"
               data-toggle="dropdown" aria-expanded="false">
           

@@ -65,7 +65,7 @@ while($row = mysqli_fetch_assoc($major))
         <!-- page content -->
         <div class="right_col" role="main" style="min-height:100vh">
             <div class="panel p-4 mt-5">
-                <div><a href="#" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add Course</a></div>
+                
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

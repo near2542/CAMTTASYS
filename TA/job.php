@@ -71,7 +71,7 @@ while($row = mysqli_fetch_assoc($major))
             $filterQuery = "SELECT *,m.m_course_id AS matching_id,ISNULL(r.m_course_id) AS matching_course_id
             FROM ta_request t 
 				LEFT JOIN matching_course m ON t.m_course_id = m.m_course_id
-            LEFT JOIN course c ON c.id = m.course_id
+            LEFT JOIN course c ON c.id = m.courseID
             LEFT JOIN user_tbl u ON u.user_id = m.user_id
             LEFT JOIN major ma ON ma.major_id = c.major_id
             LEFT JOIN semester s ON m.sem_id = s.sem_id
@@ -83,18 +83,18 @@ while($row = mysqli_fetch_assoc($major))
             $filterQuery= "SELECT *,m.m_course_id AS matching_id,ISNULL(r.m_course_id) AS matching_course_id
             FROM ta_request t 
 				LEFT JOIN matching_course m ON t.m_course_id = m.m_course_id
-            LEFT JOIN course c ON c.id = m.course_id
+            LEFT JOIN course c ON c.id = m.courseID
             LEFT JOIN user_tbl u ON u.user_id = m.user_id
             LEFT JOIN major ma ON ma.major_id = c.major_id
             LEFT JOIN semester s ON m.sem_id = s.sem_id
             LEFT JOIN day_work d ON m.t_date = d.id
             LEFT JOIN register r ON r.m_course_id = m.m_course_id AND (r.user_id = '{$_SESSION['id']}')
             WHERE approved = 1 
-         
-         
          ";
         }
         $openJob = $conn->query($filterQuery);
+        if(mysqli_error($conn)) die(mysqli_error($conn))
+        
         ?>
         
      
@@ -114,6 +114,7 @@ while($row = mysqli_fetch_assoc($major))
           $yearShow = mysqli_fetch_row($year);
 
         }?>
+        <?= mysqli_error($conn);?>
         <label for="floatingInput"><h2>Search by Year: <?= isset($_GET['year']) && $_GET['year'] != 'all'? "Sem {$yearShow[1]} Year{$yearShow[2]}" : null?></h2>  </label>
      <select class="form-control" default="<?= $_GET['year']? $_GET['year'] : 'all'?>" name="year" placeholder="Select The Major">
      <?= $semesterOption ?>
@@ -144,7 +145,6 @@ while($row = mysqli_fetch_assoc($major))
 
         <!---------------- ---------------------------->
           <tr>
-          <!-- <td><?=$data['request_id']?></td> -->
             <td><?=$data['course_id']?></td>
             <td><?=$data['course_name']?></td>
             <td><?=$data['section']?></td>

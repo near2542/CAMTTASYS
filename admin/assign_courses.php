@@ -12,19 +12,44 @@ $day = $conn->query("SELECT * from day_work");
 $teacher = $conn->query("SELECT * from user_tbl where user_type = 2");
 // $courses = $conn->query("SELECT * FROM course c LEFT JOIN major m ON c.major_id = m.major_id where c.deleted != 1 ");
 
+$semesterHold = [];
+$dayHold = [];
+$teacherHold = [];
+$coursesHold = [];
+
+while($row = mysqli_fetch_assoc($courses))
+{
+  $courseHold[] = $row;
+}
+
+while($row = mysqli_fetch_assoc($semester))
+{
+  $semesterHold[] = $row;
+
+}
+
+
+while($row = mysqli_fetch_assoc($day))
+{
+  $dayHold[] = $row;
+}
+
+while($row = mysqli_fetch_assoc($teacher))
+{
+  $teacherHold[] = $row;
+}
 
 $SemesterOption = '';
 $coursesOption = '';
 $day_option = '';
 $teacher_option = '';
-while($row = mysqli_fetch_assoc($courses))
+foreach($courses as $row)
 {
     $coursesOption .= sprintf('<option value="%d">%s</option>',
   $row['id'],
   "{$row['course_id']} {$row['course_name']}:{$row['major_name']}");
 }
-
-while($row = mysqli_fetch_assoc($semester))
+foreach($semesterHold as $row)
 {
 
   $SemesterOption .= sprintf('<option value="%d">%s</option>',
@@ -32,20 +57,24 @@ while($row = mysqli_fetch_assoc($semester))
   "ปี {$row['year']} เทอม {$row['sem_number']} ");
 }
 
-while($row = mysqli_fetch_assoc($day))
+foreach($dayHold as $row)
 {
   $day_option .= sprintf('<option value="%d">%s</option>',
   $row['id'],
   "{$row['day']}");
 }
 
-while($row=mysqli_fetch_assoc($teacher))
+foreach($teacherHold as $row)
 {
   $teacher_option  .= sprintf('<option value="%d">%s</option>',
   $row['user_id'],
   "{$row['f_name']} {$row['l_name']}"
 );
 }
+
+$semester = $conn->query("SELECT * from SEMESTER");
+$day = $conn->query("SELECT * from day_work");
+$teacher = $conn->query("SELECT * from user_tbl where user_type = 2");
 
 
 
@@ -102,8 +131,9 @@ while($row=mysqli_fetch_assoc($teacher))
   INNER JOIN course c on m.courseID = c.id
   INNER JOIN day_work d on m.t_date = d.id
   INNER JOIN user_tbl u on m.user_id = u.user_id
+  INNER JOIN major ma on ma.major_id = c.major_id
   WHERE m.deleted = 0 and c.deleted = 0
-  ORDER BY s.sem_number,m.m_status;
+  ORDER BY s.sem_number desc,m.m_status ;
   ";
   
   $MatchCourse = $conn->query($queryMatchCourse);
@@ -189,6 +219,8 @@ while($row=mysqli_fetch_assoc($teacher))
 </div>
 
         <div class="content mt-5">
+  
+        </select>
         <table class="table table-striped">
           <tr>
             <th>Status</th>
@@ -196,6 +228,7 @@ while($row=mysqli_fetch_assoc($teacher))
             <th>Year</th>
             <th>Course ID</th>
             <th>Course Name</th>
+            <th>Major</th>
             <th>Section</th>
             <th>Work Date</th>
             <th>Work Time</th>
@@ -216,6 +249,7 @@ while($row=mysqli_fetch_assoc($teacher))
             <td><?=$data['year']?></td>
             <td><?=$data['course_id']?></td>
             <td><?=$data['course_name']?></td>
+            <td><?=$data['major_name']?></td>
             <td><?=$data['section']?></td>
             <td><?=$data['day']?></td>
             <td><?=$data['t_time']?></td>
@@ -242,21 +276,34 @@ while($row=mysqli_fetch_assoc($teacher))
      <div class="form-floating mb-3">
      <label for="floatingInput">Semester: </label>
      <select class="form-control" name="sem_id" placeholder="Select The Major">
-     <?= $SemesterOption ?>
-            </select>
+     <?php
+     foreach($semesterHold as $semesterFetch):?>
+     
+        <option value="<?= $semesterFetch['sem_id']?>" <?=$semesterFetch['sem_id'] == $data['sem_id']? "selected" : null?> >
+            ปี <?= $semesterFetch['year']?> เทอม <?=$semesterFetch['sem_number']?>
+        </option>
+     <?php endforeach; ?>
+       </select>
             </div>
             <div class="form-floating mb-3">
+            
        <label for="floatingInput">Course Name</label>
        <select class="form-control" name="course_id" placeholder="Select The Major">
-            <?= $coursesOption ?>
+            <?php foreach($courseHold as $row):?>
+              <option value="<?=$row['id'] ?>" <?=$row['id']==$data['courseID']? "selected" : null?>>
+             <?=$row['id']?> <?=$data['id']?> <?=$row['course_id']?> <?=$row['course_name']?>:<?=$row['major_name']?>
+              </option>
+            <?php endforeach ?>
             </select>
      </div>
 
-     <div class="form-floating mb-3">
+     <div class="form-floating mb-3">อ
        <label for="floatingInput">Lecturer: </label>
        <select class="form-control" name="teacher_id" placeholder="Select Teacher" >
-           
-            <?= $teacher_option ?>
+              <?php foreach($teacherHold as $row):?>
+              <option value="<?=$row['user_id']?>" <?=$row['user_id']==$data['user_id']? "selected" : null?>>
+              <?=$row['f_name']?> <?=$row['l_name']?></option>
+              <?php endforeach;?>
             </select>
      </div>
 
@@ -268,7 +315,12 @@ while($row=mysqli_fetch_assoc($teacher))
     <div class="form-floating mb-3">
        <label for="floatingInput">Date:</label>
        <select class="form-control" name="day_id" placeholder="Select The Major">
-            <?= $day_option ?>
+      <?php foreach($dayHold as $row): ?>
+
+        <option value="<?=$row['id']?>" <?=$row['id']==$data['id']? "selected" : null?> ><?=$row['day']?></option>
+ 
+
+<?php endforeach; ?>
             </select>
      </div>
 
@@ -314,7 +366,7 @@ while($row=mysqli_fetch_assoc($teacher))
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="./course/delete_logic.php?old=<?=$data['m_course_id']?>" method="POST">
+      <form action="./assign/delete_logic.php?old=<?=$data['m_course_id']?>" method="POST">
       <div class="modal-body">
             
             <h2>Are you sure deleteing <?=$data['course_id'] ?> <?=$data['course_name']?> <?=$data['section']?></h2>
